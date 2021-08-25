@@ -1,0 +1,17 @@
+.verefication__footer-link {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    color: #fff;
+    text-align: center;
+    margin-top: 15px;
+    cursor: pointer;
+    outline: none;
+    text-decoration: none;
+}
+
+.verefication__footer-link:hover {
+    opacity: 0.6;
+}

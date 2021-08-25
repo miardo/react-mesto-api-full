@@ -1,0 +1,6 @@
+.elements__like-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}

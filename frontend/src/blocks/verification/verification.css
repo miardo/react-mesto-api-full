@@ -1,0 +1,19 @@
+.verification {
+    margin: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-width: 358px; 
+}
+
+@media screen and (max-width: 869px) {
+    .verification {
+        max-width: 282px;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .verification {
+        max-width: 260px;
+    }
+}

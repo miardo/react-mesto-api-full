@@ -1,0 +1,11 @@
+.popup__container_style-edition {
+    justify-content: center;
+    margin: auto;
+    box-shadow: none;
+    position: relative;
+    flex-direction: column;
+    background: none;
+    max-width: 100%;
+    padding: 0;
+    border-radius: none;
+}
