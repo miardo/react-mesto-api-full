@@ -1,4 +1,5 @@
 /* eslint-disable eol-last */
+require('dotenv').config();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
@@ -11,7 +12,7 @@ const E401 = require('../middlewares/E401');
 module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
-      res.status(200).send({ users });
+      res.status(200).send(users);
     })
     .catch(next);
 };
@@ -19,7 +20,7 @@ module.exports.getUsers = (req, res, next) => {
 module.exports.getUser = (req, res, next) => {
   User.findById(req.params.userId)
     .orFail(new E404('Пользователь с указанным _id не найден.'))
-    .then((user) => res.status(200).send({ user }))
+    .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new E400('Переданы некорректные данные.'));
@@ -31,7 +32,7 @@ module.exports.getUser = (req, res, next) => {
 module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .orFail(new E404('Пользователь с указанным _id не найден.'))
-    .then((user) => res.status(200).send({ user }))
+    .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new E400('Переданы некорректные данные.'));
@@ -106,9 +107,10 @@ module.exports.login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
       res.cookie('jwt', token, {
-        maxAge: 3600000,
+        maxAge: 3600000 * 24 * 7,
         httpOnly: true,
-        sameSite: true,
+        sameSite: 'none',
+        secure: true,
       })
         .send({
           user: {

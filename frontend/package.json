@@ -1,5 +1,5 @@
 {
-  "name": "react-mesto-api-full",
+  "name": "react-mesto-auth",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -17,9 +17,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build"
+    "predeploy": "npm run build",
+    "deploy": "npm run build && scp -r ./build/* adminkarimov@84.201.159.103:/home/adminkarimov/mesto-frontend"
   },
-  "homepage": "https://miardo.github.io/react-mesto-api-full/",
+  "homepage": "https://miardo.github.io/",
   "eslintConfig": {
     "extends": [
       "react-app",

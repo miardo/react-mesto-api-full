@@ -13,14 +13,18 @@ class Api {
 
     getInitialCards() {
         return fetch(`${this._url}/cards`, {
-            headers: this._headers
+            method: 'GET',
+            credentials: 'include',
+            headers: this._headers,
         })
             .then(this._getResponseData);
     }
 
     getUserInfo() {
         return fetch(`${this._url}/users/me`, {
-            headers: this._headers
+            method: 'GET',
+            credentials: 'include',
+            headers: this._headers,
         })
             .then(this._getResponseData);
     }
@@ -28,6 +32,7 @@ class Api {
     editUserInfo(data) {
         return fetch(`${this._url}/users/me`, {
             method: 'PATCH',
+            credentials: 'include',
             headers: this._headers,
             body: JSON.stringify({
                 name: data.name,
@@ -40,6 +45,7 @@ class Api {
     addCard(data) {
         return fetch(`${this._url}/cards`, {
             method: 'POST',
+            credentials: 'include',
             headers: this._headers,
             body: JSON.stringify({
                 name: data.name,
@@ -52,38 +58,25 @@ class Api {
     deleteCard(cardId) {
         return fetch(`${this._url}/cards/${cardId}`, {
             method: 'DELETE',
-            headers: this._headers
+            credentials: 'include',
+            headers: this._headers,
         })
             .then(this._getResponseData);
     }
 
-    addLikes(cardId) {
-        return fetch(`${this._url}/cards/likes/${cardId}`, {
-            method: 'PUT',
-            headers: this._headers
+    changeLikeCardStatus(cardId, setLike) {
+        return fetch(`${this._url}/cards/${cardId}/likes`, {
+            method: setLike ? 'PUT' : 'DELETE',
+            credentials: 'include',
+            headers: this._headers,
         })
             .then(this._getResponseData);
-    }
-
-    deleteLike(cardId) {
-        return fetch(`${this._url}/cards/likes/${cardId}`, {
-            method: 'DELETE',
-            headers: this._headers
-        })
-            .then(this._getResponseData);
-    }
-
-    changeLikeCardStatus(cardId, isLiked) {
-        if (!isLiked) {
-            return this.deleteLike(cardId);
-        } else {
-            return this.addLikes(cardId);
-        }
     }
 
     addAvatar(data) {
         return fetch(`${this._url}/users/me/avatar`, {
             method: 'PATCH',
+            credentials: 'include',
             headers: this._headers,
             body: JSON.stringify({
                 avatar: data.avatar
@@ -95,7 +88,8 @@ class Api {
 }
 
 const api = new Api({
-    baseUrl: 'api.mesto.practicum.nomoredomains.monster',
+    baseUrl: 'https://api.mesto.practicum.nomoredomains.monster',
+    credentials: 'include',
     headers: {
         'Content-Type': 'application/json'
     }

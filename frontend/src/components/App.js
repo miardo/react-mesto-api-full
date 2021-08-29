@@ -36,6 +36,7 @@ function App() {
   });
 
   useEffect(() => {
+    if (loggedIn) {
     api.getUserInfo()
       .then((userInfo) => {
         setCurrentUser(userInfo);
@@ -47,7 +48,8 @@ function App() {
         setCards(initialCards)
       })
       .catch((err) => console.log(err));
-  }, []);
+    }
+  }, [loggedIn]);
 
 
   const handleCardClick = (card) => {
@@ -98,8 +100,7 @@ function App() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
-
+    const isLiked = card.likes.some(id => id === currentUser._id);
     api.changeLikeCardStatus(card._id, !isLiked)
       .then((newCard) => {
         setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
@@ -110,7 +111,7 @@ function App() {
   function handleCardDelete(card) {
     api.deleteCard(card._id)
       .then(() => {
-        setCards((cards) => cards.filter((c) => c._id !== card._id));
+        setCards((cards) => cards.filter(id => id !== card._id));
       })
       .catch((err) => console.log(err));
   }
@@ -127,8 +128,7 @@ function App() {
   function handleLogin(email, password) {
     auth.authorize(email, password)
       .then((res) => {
-        if (res.token) {
-          localStorage.setItem('jwt', res.token);
+        if (res) {
           setData(email);
           setLoggedIn(true);
           history.push('/');
@@ -151,26 +151,24 @@ function App() {
   }
 
   function handleTokenCheck() {
-    const jwt = localStorage.getItem('jwt');
-    if (jwt) {
-      auth.getContent(jwt)
+      auth.getContent()
         .then((res) => {
-          setData({ email: res.data.email})
+          setData({ email: res.email})
           setLoggedIn(true)
           history.push("/");
         })
         .catch(err => console.log(err));
-    };
   };
 
   useEffect(() => {
     handleTokenCheck();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+// eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function handleSignOut() {
     setLoggedIn(false);
-    localStorage.removeItem('jwt');
+    setCards([]);
+    setCurrentUser({});
   }
 
 

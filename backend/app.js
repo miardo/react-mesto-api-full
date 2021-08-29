@@ -9,6 +9,7 @@ const helmet = require('helmet');
 const { errors, celebrate, Joi } = require('celebrate');
 const cookieParser = require('cookie-parser');
 const validator = require('validator');
+const cors = require('cors');
 
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
@@ -17,12 +18,26 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const E404 = require('./middlewares/E404');
 
+const corsOptions = {
+  origin: [
+    'https://mesto.practicum.nomoredomains.club',
+    'http://mesto.practicum.nomoredomains.club',
+    'https://api.mesto.practicum.nomoredomains.monster',
+    'http://api.mesto.practicum.nomoredomains.monster',
+    'https://localhost:3000',
+  ],
+  credentials: true,
+  method: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+};
+
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
   useUnifiedTopology: true,
 });
+
+app.use(cors(corsOptions));
 
 app.use(cookieParser());
 
